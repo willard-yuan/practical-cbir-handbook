@@ -1,13 +1,13 @@
 # Fdb version 3
-["bibtex cbir_book"] 1506528926 "cbir_book.aux" "cbir_book.bbl" "cbir_book" 1506528928
+["bibtex cbir_book"] 1506612755 "cbir_book.aux" "cbir_book.bbl" "cbir_book" 1506612758
   "/usr/local/texlive/2015/texmf-dist/bibtex/bst/base/ieeetr.bst" 1292289607 18361 1a00e58565e7f19bf2b3e1bfb82254ae ""
-  "cbir_book.aux" 1506528928 3340 7c0feb8d40bbb98a9e4cff2d9c3292a4 ""
+  "cbir_book.aux" 1506612758 4527 312db24b5e79e4f1623aca347d3687dd ""
   "cbir_book.bcf" 0 -1 0 ""
   "reference.bib" 1506526012 432 f9b5b81b04588cb3f56d51af534c25db ""
   (generated)
   "cbir_book.blg"
   "cbir_book.bbl"
-["pdflatex"] 1506528926 "cbir_book.tex" "cbir_book.pdf" "cbir_book" 1506528928
+["pdflatex"] 1506612755 "cbir_book.tex" "cbir_book.pdf" "cbir_book" 1506612758
   "./figure/cover.pdf" 1440234295 139627 6b0df45a4e287bc7efef3a42949f0376 ""
   "./figure/greenbase.pdf" 1440234295 58004 424476eaf48ecc703ac5c88a7a19de8f ""
   "./figure/logo.pdf" 1440234295 250678 4cff5fab7095579c35093a0dc01477b2 ""
@@ -210,19 +210,19 @@
   "/usr/local/texlive/2015/texmf-dist/web2c/texmf.cnf" 1428852030 31983 18aeec08f48baa3cf3508d538dd5f459 ""
   "/usr/local/texlive/2015/texmf-var/web2c/xetex/xelatex.fmt" 1434942512 3445932 f37a982929209ba118713778f40e1758 ""
   "/usr/local/texlive/2015/texmf.cnf" 1432479636 577 0d611272082f3cdb8e80e09a3c69cf07 ""
-  "cbir_book.aux" 1506528928 3340 7c0feb8d40bbb98a9e4cff2d9c3292a4 ""
-  "cbir_book.bbl" 1506528926 49 0eba253fc001332e731e8aba3f23127b "bibtex cbir_book"
-  "cbir_book.out" 1506528928 1244 991834d0df15a93a31c27c06fccc5b9e ""
-  "cbir_book.tex" 1506528924 17603 05d5d5f58bb3256989a6d337855c8a4d ""
-  "cbir_book.toc" 1506528928 1456 c27e2971faac12dd23654ad8c364e1f9 ""
+  "cbir_book.aux" 1506612758 4527 312db24b5e79e4f1623aca347d3687dd ""
+  "cbir_book.bbl" 1506612755 49 0eba253fc001332e731e8aba3f23127b "bibtex cbir_book"
+  "cbir_book.out" 1506612758 2039 d7606dafccfcdea86cf13f0bbad6caa5 ""
+  "cbir_book.tex" 1506612753 38309 82a71f4ac39aa5f188363306205d29cf ""
+  "cbir_book.toc" 1506612758 2367 def13c86c5beccc8727115643b7c069f ""
   "elegantbook.cls" 1506528336 13990 ba4a09b80f0d72c08eac4ae5d1791ab5 ""
   "figure/cover.pdf" 1440234295 139627 6b0df45a4e287bc7efef3a42949f0376 ""
   "figure/greenbase.pdf" 1440234295 58004 424476eaf48ecc703ac5c88a7a19de8f ""
   "figure/logo.pdf" 1440234295 250678 4cff5fab7095579c35093a0dc01477b2 ""
   "image/figure-31.jpg" 1440234295 33848 e67dfcdef4fdd583169d450f516f59cc ""
   (generated)
-  "cbir_book.log"
-  "cbir_book.aux"
   "cbir_book.toc"
+  "cbir_book.aux"
+  "cbir_book.log"
   "cbir_book.out"
   "cbir_book.pdf"

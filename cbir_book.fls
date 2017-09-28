@@ -380,6 +380,11 @@ INPUT ./figure/greenbase.pdf
 INPUT ./figure/greenbase.pdf
 INPUT ./figure/greenbase.pdf
 INPUT ./figure/greenbase.pdf
+INPUT ./figure/greenbase.pdf
+INPUT ./figure/greenbase.pdf
+INPUT ./figure/greenbase.pdf
+INPUT ./figure/greenbase.pdf
+INPUT ./figure/greenbase.pdf
 INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/listings/lstlang1.sty
 INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/listings/lstlang1.sty
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/adobe/palatino/pplr7t.tfm
@@ -417,7 +422,10 @@ INPUT ./figure/greenbase.pdf
 INPUT ./figure/greenbase.pdf
 INPUT ./figure/greenbase.pdf
 INPUT ./figure/greenbase.pdf
+INPUT ./figure/greenbase.pdf
+INPUT ./figure/greenbase.pdf
 INPUT cbir_book.bbl
 INPUT cbir_book.bbl
+INPUT ./figure/greenbase.pdf
 INPUT ./figure/greenbase.pdf
 INPUT cbir_book.aux

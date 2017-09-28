@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2015.6.22)  28 SEP 2017 00:15
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2015.6.22)  28 SEP 2017 23:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2096,56 +2096,24 @@ File: ./figure/cover.pdf Graphic file (type QTm)
 ]
 File: ./figure/greenbase.pdf Graphic file (type QTm)
  <use  "./figure/greenbase.pdf" >
-(./cbir_book.toc)
+(./cbir_book.toc [2
+
+])
 \tf@toc=\write5
 \openout5 = `cbir_book.toc'.
 
- [2
+File: ./figure/greenbase.pdf Graphic file (type QTm)
+ <use  "./figure/greenbase.pdf" > [3]
+File: ./figure/greenbase.pdf Graphic file (type QTm)
+
+<use  "./figure/greenbase.pdf" > [4
 
 ]
 第 1章 1.
 File: ./figure/greenbase.pdf Graphic file (type QTm)
 <use  "./figure/greenbase.pdf" > [1
 
-
 ]
-File: ./figure/greenbase.pdf Graphic file (type QTm)
- <use  "./figure/greenbase.pdf" > [2]
-第 2章 2.
-File: ./figure/greenbase.pdf Graphic file (type QTm)
-<use  "./figure/greenbase.pdf" >
-\g__fontspec_family_方正中等线简体_int=\count211
-.................................................
-. fontspec info: "no-font-shape"
-. 
-. Could not resolve font 方正中等线简体/BI (it probably doesn't exist).
-.................................................
-.................................................
-. fontspec info: "no-font-shape"
-. 
-. Could not resolve font 方正中等线简体/B (it probably doesn't exist).
-.................................................
-.................................................
-. fontspec info: "no-font-shape"
-. 
-. Could not resolve font 方正中等线简体/I (it probably doesn't exist).
-.................................................
-.................................................
-. fontspec info: "defining-font"
-. 
-. Font family '方正中等线简体(0)' created for font '方正中等线简体' with options
-. [Mapping=tex-text,Script={CJK}].
-. 
-. This font family consists of the following shapes:
-. 
-. * 'normal' with NFSS spec.:
-. <->"方正中等线简体/OT:script=hani;language=DFLT;mapping=tex-text;"
-. 
-. * 'small caps' with NFSS spec.:
-. 
-. and font adjustment code:
-. 
-.................................................
 .................................................
 . fontspec info: "no-font-shape"
 . 
@@ -2188,16 +2156,61 @@ File: ./figure/greenbase.pdf Graphic file (type QTm)
 . and font adjustment code:
 . 
 .................................................
+File: ./figure/greenbase.pdf Graphic file (type QTm)
+ <use  "./figure/greenbase.pdf" > [2]
+File: ./figure/greenbase.pdf Graphic file (type QTm)
+
+<use  "./figure/greenbase.pdf" > [3]
+File: ./figure/greenbase.pdf Graphic file (type QTm)
+ <use  "./figure/greenbase.pdf" > [4]
+File: ./figure/greenbase.pdf Graphic file (type QTm)
+
+<use  "./figure/greenbase.pdf" > [5]
+第 2章 2.
+File: ./figure/greenbase.pdf Graphic file (type QTm)
+<use  "./figure/greenbase.pdf" >
+\g__fontspec_family_方正中等线简体_int=\count211
+.................................................
+. fontspec info: "no-font-shape"
+. 
+. Could not resolve font 方正中等线简体/BI (it probably doesn't exist).
+.................................................
+.................................................
+. fontspec info: "no-font-shape"
+. 
+. Could not resolve font 方正中等线简体/B (it probably doesn't exist).
+.................................................
+.................................................
+. fontspec info: "no-font-shape"
+. 
+. Could not resolve font 方正中等线简体/I (it probably doesn't exist).
+.................................................
+.................................................
+. fontspec info: "defining-font"
+. 
+. Font family '方正中等线简体(0)' created for font '方正中等线简体' with options
+. [Mapping=tex-text,Script={CJK}].
+. 
+. This font family consists of the following shapes:
+. 
+. * 'normal' with NFSS spec.:
+. <->"方正中等线简体/OT:script=hani;language=DFLT;mapping=tex-text;"
+. 
+. * 'small caps' with NFSS spec.:
+. 
+. and font adjustment code:
+. 
+.................................................
 
 Underfull \vbox (badness 3815) has occurred while \output is active []
 
- [3
+ [6
 
 ]
 File: ./figure/greenbase.pdf Graphic file (type QTm)
 
-<use  "./figure/greenbase.pdf" > [4]
-Overfull \hbox (61.67801pt too wide) in paragraph at lines 154--155
+<use  "./figure/greenbase.pdf" > [7]
+Overfull \hbox (61.67801pt too wide) in paragraph at lines 164--165
 [][][][][] [] [][] [] [][][][][][][] [] [][][][][][][][][][][][] [] [][][][][] 
 [] [][] [] [][][][][][][] [] [][][][][][][][][][][][] [] [][][][] [] [][][][][]
 [][][][][][][][][][][][][][][][][][][][][][][][][][][]$[][]\EU1/MicrosoftYaHei(
@@ -2205,9 +2218,9 @@ Overfull \hbox (61.67801pt too wide) in paragraph at lines 154--155
  []
 
 File: ./figure/greenbase.pdf Graphic file (type QTm)
-<use  "./figure/greenbase.pdf" > [5]
+<use  "./figure/greenbase.pdf" > [8]
 File: ./figure/greenbase.pdf Graphic file (type QTm)
- <use  "./figure/greenbase.pdf" > [6]
+ <use  "./figure/greenbase.pdf" > [9]
 第 3章 3.
 File: ./figure/greenbase.pdf Graphic file (type QTm)
 <use  "./figure/greenbase.pdf" >
@@ -2215,18 +2228,18 @@ File: ./figure/greenbase.pdf Graphic file (type QTm)
 File: lstlang1.sty 2014/09/06 1.5e listings language file
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 193.
+(Font)              scaled to size 10.42007pt on input line 203.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 193.
+(Font)              scaled to size 7.91925pt on input line 203.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 193.
+(Font)              scaled to size 6.25204pt on input line 203.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 193.
+(Font)              scaled to size 10.42007pt on input line 203.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 193.
+(Font)              scaled to size 7.91925pt on input line 203.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 193.
-LaTeX Font Info:    Try loading font information for EU1+lmtt on input line 194
+(Font)              scaled to size 6.25204pt on input line 203.
+LaTeX Font Info:    Try loading font information for EU1+lmtt on input line 204
 .
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/euenc/eu1lmtt.fd
@@ -2234,7 +2247,7 @@ File: eu1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 File: ./image/figure-31.jpg Graphic file (type QTm)
 
-<use  "./image/figure-31.jpg" > [7
+<use  "./image/figure-31.jpg" > [10
 
 ]
 (/usr/local/texlive/2015/texmf-dist/tex/latex/listings/lstlang1.sty
@@ -2245,47 +2258,57 @@ File: lstlang1.sty 2014/09/06 1.5e listings language file
 )
 File: ./figure/greenbase.pdf Graphic file (type QTm)
 
-<use  "./figure/greenbase.pdf" > [8]
+<use  "./figure/greenbase.pdf" > [11]
 File: ./figure/greenbase.pdf Graphic file (type QTm)
- <use  "./figure/greenbase.pdf" > [9]
+ <use  "./figure/greenbase.pdf" > [12]
 第 4章 4.
 File: ./figure/greenbase.pdf Graphic file (type QTm)
-<use  "./figure/greenbase.pdf" > [10
+<use  "./figure/greenbase.pdf" > [13
 
 ]
 第 5章 5.
 File: ./figure/greenbase.pdf Graphic file (type QTm)
-<use  "./figure/greenbase.pdf" >
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 264.
-
-(./cbir_book.bbl [11
+<use  "./figure/greenbase.pdf" > [14
 
 ]
 File: ./figure/greenbase.pdf Graphic file (type QTm)
- <use  "./figure/greenbase.pdf" >
+ <use  "./figure/greenbase.pdf" > [15]
+第 6章 6.
+File: ./figure/greenbase.pdf Graphic file (type QTm)
+<use  "./figure/greenbase.pdf" >
+
+Package hyperref Warning: Difference (2) between bookmark levels is greater 
+(hyperref)                than one, level fixed on input line 304.
+
+[16
+
+] (./cbir_book.bbl
+File: ./figure/greenbase.pdf Graphic file (type QTm)
+ <use  "./figure/greenbase.pdf" > [17]
+File: ./figure/greenbase.pdf Graphic file (type QTm)
+
+<use  "./figure/greenbase.pdf" >
 
 LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
 ) 
 AED: lastpage setting LastPage
-[12
+[18
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 280.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 280.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 336.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 336.
  (./cbir_book.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 280.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 280.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 336.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 336.
  ) 
 Here is how much of TeX's memory you used:
- 41036 strings out of 493706
- 821237 string characters out of 6145769
- 1024220 words of memory out of 5000000
- 43731 multiletter control sequences out of 15000+600000
+ 41052 strings out of 493706
+ 821963 string characters out of 6145769
+ 1023984 words of memory out of 5000000
+ 43747 multiletter control sequences out of 15000+600000
  20188 words of font info for 110 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
  62i,15n,84p,10399b,1455s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on cbir_book.pdf (14 pages).
+Output written on cbir_book.pdf (22 pages).
