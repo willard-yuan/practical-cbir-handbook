@@ -1,12 +1,12 @@
 This is BibTeX, Version 0.99d (TeX Live 2015)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: cbir_book.aux
+The top-level auxiliary file: /Users/willard/Public/github/practical-cbir-handbook/.texpadtmp/cbir_book.aux
 The style file: ieeetr.bst
-I found no \citation commands---while reading file cbir_book.aux
-Database file #1: reference.bib
+I found no \citation commands---while reading file /Users/willard/Public/github/practical-cbir-handbook/.texpadtmp/cbir_book.aux
+Database file #1: ../reference.bib
 You've used 0 entries,
             1876 wiz_defined-function locations,
-            477 strings with 3477 characters,
+            477 strings with 3608 characters,
 and the built_in function-call counts, 20 in all, are:
 = -- 0
 > -- 0

@@ -187,35 +187,25 @@
 
 
 %%字体设置
+%\RequirePackage{lmodern,fix-cm,type1cm}
 \RequirePackage{fontenc}
 \RequirePackage[no-math,cm-default]{fontspec}
 \defaultfontfeatures{Mapping=tex-text}
 \RequirePackage{xunicode}
 \RequirePackage{xltxtra}
-%\setmainfont[Ligatures=TeX]{Minion Pro} %  (\textrm)
-%\setsansfont{Myriad Pro} %  (\textsf)
-%\setmonofont{Inconsolata}%Palatino Linotype
-\setmainfont[Ligatures=TeX]{Arial} %  (\textrm)
-\setsansfont{Arial} %  (\textsf)
-\setmonofont{Arial}%Palatino Linotype
+\setmainfont[Ligatures=TeX]{Minion Pro} %  (\textrm)
+\setsansfont{Myriad Pro} %  (\textsf)
+\setmonofont{Adobe Garamond Pro}%Palatino Linotype
 %-中文字体设置-%
 \RequirePackage{xeCJK}
-%\setCJKmainfont[BoldFont={黑体},ItalicFont={楷体}]{华文中宋}%方正书宋_GBK Adobe Song Std L
-%\setCJKsansfont[BoldFont={黑体}]{方正中等线简体}
-%\setCJKmonofont{方正中等线简体}
-\setCJKmainfont[BoldFont={Microsoft YaHei},ItalicFont={Microsoft YaHei}]{Microsoft YaHei}%方正书宋_GBK Adobe Song Std L
-\setCJKsansfont[BoldFont={Microsoft YaHei}]{Microsoft YaHei}
-\setCJKmonofont{方正中等线简体}
-%\setCJKmonofont{Microsoft YaHei}
+\setCJKmainfont[BoldFont={STHeitiSC-Light},ItalicFont={STKaitiSC-Regular}]{STZhongsong}%方正书宋_GBK Adobe Song Std L
+\setCJKsansfont[BoldFont={STHeitiSC-Light}]{FZZDXJW--GB1-0}
+\setCJKmonofont{FZQTJW--GB1-0}
 \XeTeXlinebreaklocale "zh"
 \XeTeXlinebreakskip = 0pt plus 1pt
 
-\setCJKfamilyfont{new}{方正苏新诗柳楷简体}
-\setCJKfamilyfont{note}{方正启体简体}
-%\setCJKfamilyfont{new}{Microsoft YaHei}
-%\setCJKfamilyfont{note}{Microsoft YaHei}
+\setCJKfamilyfont{new}{FZSXSLKJW--GB1-0}
 \newfontfamily\gara{Adobe Garamond Pro}
-%\newfontfamily\gara{Arial}
 
 %% 定理\引理\定义样式设置
 \RequirePackage{environ}
@@ -452,6 +442,3 @@ Email: \hyperlink{\the\email}{\the\email}\\
 \newcommand{\Enoindent}{\parident\z@}
 %----自动执行
 \AtBeginDocument{\Eindent}
-
-
-

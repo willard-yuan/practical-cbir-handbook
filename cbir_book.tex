@@ -1,5 +1,5 @@
 %!TEX program = xelatex
-\documentclass[color=green,mathpazo,titlestyle=hang]{elegantbook}
+\documentclass[color=cyan,mathpazo,titlestyle=hang]{elegantbook}
 
 \author{袁勇}
 \email{yongyuanstu@gmail.com}
@@ -269,7 +269,7 @@ $ python load_display_save.py --image ../images/trex.png
 
 \chapter{特征编码}
 
-BoW (Bag of visual word)、VLAD (Aggregating local descriptors)以及FV (Fisher Vector)是三种非常经典的将局部特征表示成全局特征的编码方法，在图像检索领域，这图像检索领域，这三种编码方法是必须面对的三名剑客。下面是小白菜结合自己的理解，对这三种编码方法的原理和一些实践经验的总结。
+局部特征作为一种非常鲁棒性的特征，其与全局特征构成了计算机领域图像内容描述的基础。相比于全局特征，局部特征在刻画图像局部区域的形状、纹理、梯度等方面，往往能够更细的粒度，因而对图像内容的表征也更丰富，但同时也引发了新的问题，即特征处理效率低、存储大等方面的问题。因而需要将局部特征经过某种编码方式，最终表示成一种紧凑的全局特征表示
 
 \section{BoF词袋模型}
 
@@ -285,15 +285,84 @@ BoW (Bag of visual word)、VLAD (Aggregating local descriptors)以及FV (Fisher 
 
 BOW做的是描述子的0阶统计分布，而FV则是扩展了的BOW的高阶统计。这里引出来的FV是什么呢？VLAD是FV的特例，这里我们先不关注FV，我们只要借此推得VLAD是BOW的高阶统计就行。
 
+这里我们可以直接调用INRIA开发的Yael工具包，该工具包提供了BoW、VALD以及FV的接口。为了更好的理解VALD编码的过程，可以打开Yael的vlad.c文件，其中有$vlad_compute$方法：
+
+\begin{lstlisting}[language=c++]
+void vlad_compute(int k, int d, const float *centroids, 
+                  int n, const float *v, float *desc)  
+{
+  int i,j;
+  int *assign = ivec_new (n);
+  nn(n, k, d, centroids, v, assign);
+  fvec_0 (desc, k * d);
+  for (i = 0 ; i < n ; i++) {
+    for (j = 0 ; j < d ; j++) 
+      desc[assign[i]*d+j] += v[i*d+j] - centroids[assign[i]*d+j];
+  }      
+  free(assign);
+}
+\end{lstlisting}
+
+上面清楚的显示了得到的desc(即VLAD特征表示)为距离类中心最近的局部特征的累积和，其中方法nn是做最近邻查找。有了这个接口后，我们要做的就是提取局部特征，比如SIFT，然后使用Yael里提供的KMeans接口做聚类，得到聚类中心，然后调用该函数，即可得到VLAD特征表示。
+
 经过上面三个步骤后，一幅图像可以用一个1(K128)维的向量表示。为了初步验证上面的过程是否正确，来看看上面那篇论文中VLAD的维数是否如这里所理解的是一个1(K128)维的向量，直接看实验表：
 
 \section{Fisher Vector}
 
-每幅图像由像素集组成。像素是一幅图像的{\color{red}{原材料，积木}}。它是图像的最小单元。
+\subsection{Fisher核}
 
-一般情况下，像素通常采用两种方式进行表示：灰度和彩色。在灰度图像中，每一个像素的像素值在0到255之间，“0”代表“黑色”，“1”表示“白色”。
+在空间$\chi$中，某样本$X$存在$T$个观测变量，记为$X={x_t, t=1 \dots T}$。对应到图像上，样本$X$为图像$I$提取到的$T$个维度为$D$局部特征，比如SIFT。设$\mu_\lambda$为概率密度函数，并且函数包含有$M$个参数，即$\lambda = [\lambda_1, \dots, \lambda_M]$。根据生成式原理，空间样本$\chi$中的元素$X$可以使用该概率密度函数进行建模。在统计学上，分数函数（score funciton）可以由对数似然函数的梯度给出，即：
 
-\subsection{VLAD}
+$$G^X_\lambda = \nabla log \mu_\lambda(X)$$ 
+
+上面对数函数的梯度描述了$M$个参数中，每一个参数$\lambda_i$对该生成式过程的贡献度。
+
+\subsection{Fisher核拓展到图像}
+
+给定图像I，假设从该图像中提取到了$T$个$D$维的局部描述子，比如SIFT，
+
+\begin{lstlisting}[language=c++]
+#!/usr/bin/env python
+# encoding: utf-8
+# Author: yongyuan.name
+
+import os
+import multiprocessing
+from multiprocessing import Process, freeze_support, Pool
+
+
+def split_list(alist, wanted_parts=1):
+    length = len(alist)
+    return [ alist[i*length // wanted_parts: (i+1)*length // wanted_parts]
+             for i in range(wanted_parts) ]
+             
+def cpu_task(img_names, bbin, save_dir):
+    for i, line in enumerate(img_names):
+        img_path = os.path.join('/home/yuanyong/datasets/oxford', line)
+        cmd = bbin + ' ' + img_path + ' ' + save_dir
+        os.system(cmd) # returns the exit status
+        print "%d(%d), %s" %(i+1, len(img_names), line)
+
+if __name__ == '__main__':
+
+    multiprocessing.freeze_support()
+    pool = multiprocessing.Pool()
+
+    parts = 50
+    bbin = '/home/yuanyong/cpp/hesaff/hesaff'
+    txt_path = '/raid/yuanyong/yael_fv/oxford.txt'
+    save_dir = '/raid/yuanyong/yael_fv/oxford_hesaff_sift/'
+
+    with open(txt_path, 'r') as f:
+        content = f.readlines()
+        content = [x.strip() for x in content]
+    blocks = split_list(content, wanted_parts = parts)
+
+    for i in xrange(0, parts):
+        pool.apply_async(cpu_task, args=(blocks[i],bbin,save_dir,))
+    pool.close()
+    pool.join()
+\end{lstlisting}
 
 每幅图像由像素集组成。像素是一幅图像的{\color{red}{原材料，积木}}。它是图像的最小单元。
 
@@ -301,9 +370,9 @@ BOW做的是描述子的0阶统计分布，而FV则是扩展了的BOW的高阶�
 
 \chapter{ANN搜索}
 
-\subsection{矩阵相乘}
+\section{矩阵相乘}
 
-\subsection{基于树的方法}
+\section{基于树的方法}
 
 几乎所有的ANN方法都是对全空间的划分，所以基于树的方法也不例外。基于树的方法采用树这种数据结构的方法来表达对全空间的划分，其中又以KD树最为经典。下面左图是KD树对全空间的划分过程，以及用树这种数据结构来表达的一个过程。
 
@@ -313,13 +382,44 @@ BOW做的是描述子的0阶统计分布，而FV则是扩展了的BOW的高阶�
 
 一般而言，在空间维度比较低的时候，KD树是比较高效的，当空间维度较高时，可以采用下面的哈希方法或者矢量量化方法。
 
-\subsection{哈希方法}
+\section{哈希方法}
 
 哈希，顾名思义，就是将连续的实值散列化为0、1的离散值。在散列化的过程中，对散列化函数(也就是哈希函数)有一定的要求。根据学习的策略，可以将哈希方法分为无监督、有监督和半监督三种类型。在评估某种哈希方法用于图像检索的检索精度时，可以使用knn得到的近邻作为ground truth，也可以使用样本自身的类别作为ground truth。所以在实际评估准确度的时候，根据ground truth的定义，这里面是有一点小的trick的。通常对于无监督的哈希图像检索方法，由于我们使用的都是未标记的数据样本，所以我们会很自然的采用knn得到的近邻作为ground truth，但是对于图像检索的这一任务时，在对哈希函数的构造过程中，通常会有“相似的样本经编码后距离尽可能的近，不相似的样本编码后则尽可能的远”这一基本要求，这里讲到的相似，指语义的相似，因而你会发现，编码的基本要求放在无监督哈希方法里，似乎与采用knn得到的近邻作为ground truth的评价方式有些南辕北辙。对无监督哈希方法的ground truth一点小的疑惑在小白菜读书的时候就心存这样的困惑，一直悬而未解。当然，在做无监督的图像哈希方法，采用样本自身的类别作为ground truth是毋庸置疑的。
 
 小白菜读书那会儿，研究了很多的哈希图像检索方法（见hashing-baseline-for-image-retrieval），有时候总会给一些工程实践上的错觉（在今天看来是这样的），即新论文里的方法远远碾压经典的方法，那是不是在实际中这些方法就很work很好使。实践的经历告诉小白菜，还是经典的东西更靠谱，不是因为新的方法不好，而是新的事物需要经过时间的沉淀与优化。
 
 所以，这里不会对近两年的哈希方法做铺陈，而是聊一聊工程中在要使用到哈希方法的场景下一般都会选用的局部敏感哈希（Local Sensitive Hashing, LSH）。
+
+\section{矢量量化方法}
+
+矢量量化方法，即vector quantization，其具体定义为：将一个向量空间中的点用其中的一个有限子集来进行编码的过程。在矢量量化编码中，关键是码本的建立和码字搜索算法。比如常见的聚类算法，就是一种矢量量化方法。而在ANN近似最近邻搜索中，向量量化方法又以乘积量化(PQ, Product Quantization)最为典型。在之前的博文基于内容的图像检索技术的最后，对PQ乘积量化的方法做过简单的概要。在这一小节里，小白菜结合自己阅读的论文和代码对PQ乘积量化、倒排乘积量化(IVFPQ)做一种更加直观的解释。
+
+\subsection{PQ乘积量化}
+
+PQ乘积量化的核心思想还是聚类，或者说具体应用到ANN近似最近邻搜索上，K-Means是PQ乘积量化子空间数目为1的特例。PQ乘积量化生成码本和量化的过程可以用如下图示来说明：
+
+在训练阶段，针对N个训练样本，假设样本维度为128维，我们将其切分为4个子空间，则每一个子空间的维度为32维，然后我们在每一个子空间中，对子向量采用K-Means对其进行聚类(图中示意聚成256类)，这样每一个子空间都能得到一个码本。这样训练样本的每个子段，都可以用子空间的聚类中心来近似，对应的编码即为类中心的ID。如图所示，通过这样一种编码方式，训练样本仅使用的很短的一个编码得以表示，从而达到量化的目的。对于待编码的样本，将它进行相同的切分，然后在各个子空间里逐一找到距离它们最近的类中心，然后用类中心的id来表示它们，即完成了待编码样本的编码。
+
+正如前面所说的，在矢量量化编码中，关键是码本的建立和码字的搜索算法，在上面，我们得到了建立的码本以及量化编码的方式。剩下的重点就是查询样本与dataset中的样本距离如何计算的问题了。
+
+在查询阶段，PQ同样在计算查询样本与dataset中各个样本的距离，只不过这种距离的计算转化为间接近似的方法而获得。PQ乘积量化方法在计算距离的时候，有两种距离计算方式，一种是对称距离，另外一种是非对称距离。非对称距离的损失小(也就是更接近真实距离)，实际中也经常采用这种距离计算方式。下面过程示意的是查询样本来到时，以非对称距离的方式(红框标识出来的部分)计算到dataset样本间的计算示意：
+
+
+具体地，查询向量来到时，按训练样本生成码本的过程，将其同样分成相同的子段，然后在每个子空间中，计算子段到该子空间中所有聚类中心得距离，如图中所示，可以得到4*256个距离，这里为便于后面的理解说明，小白菜就把这些算好的距离称作距离池。在计算库中某个样本到查询向量的距离时，比如编码为(124, 56, 132, 222)这个样本到查询向量的距离时，我们分别到距离池中取各个子段对应的距离即可，比如编码为124这个子段，在第1个算出的256个距离里面把编号为124的那个距离取出来就可，所有子段对应的距离取出来后，将这些子段的距离求和相加，即得到该样本到查询样本间的非对称距离。所有距离算好后，排序后即得到我们最终想要的结果。
+
+从上面这个过程可以很清楚地看出PQ乘积量化能够加速索引的原理：即将全样本的距离计算，转化为到子空间类中心的距离计算。比如上面所举的例子，原本brute-force search的方式计算距离的次数随样本数目N成线性增长，但是经过PQ编码后，对于耗时的距离计算，只要计算4*256次，几乎可以忽略此时间的消耗。另外，从上图也可以看出，对特征进行编码后，可以用一个相对比较短的编码来表示样本，自然对于内存的消耗要大大小于brute-force search的方式。
+
+在某些特殊的场合，我们总是希望获得精确的距离，而不是近似的距离，并且我们总是喜欢获取向量间的余弦相似度（余弦相似度距离范围在[-1,1]之间，便于设置固定的阈值），针对这种场景，可以针对PQ乘积量化得到的前top@K做一个brute-force search的排序。
+
+\subsection{倒排乘积量化}
+
+倒排PQ乘积量化(IVFPQ)是PQ乘积量化的更进一步加速版。其加速的本质逃不开小白菜在最前面强调的是加速原理：brute-force搜索的方式是在全空间进行搜索，为了加快查找的速度，几乎所有的ANN方法都是通过对全空间分割，将其分割成很多小的子空间，在搜索的时候，通过某种方式，快速锁定在某一（几）子空间，然后在该（几个）子空间里做遍历。在上一小节可以看出，PQ乘积量化计算距离的时候，距离虽然已经预先算好了，但是对于每个样本到查询样本的距离，还是得老老实实挨个去求和相加计算距离。但是，实际上我们感兴趣的是那些跟查询样本相近的样本（小白菜称这样的区域为感兴趣区域），也就是说老老实实挨个相加其实做了很多的无用功，如果能够通过某种手段快速将全局遍历锁定为感兴趣区域，则可以舍去不必要的全局计算以及排序。倒排PQ乘积量化的”倒排“，正是这样一种思想的体现，在具体实施手段上，采用的是通过聚类的方式实现感兴趣区域的快速定位，在倒排PQ乘积量化中，聚类可以说应用得淋漓尽致。
+
+倒排PQ乘积量化整个过程如下图所示：
+
+在PQ乘积量化之前，增加了一个粗量化过程。具体地，先对N个训练样本采用K-Means进行聚类，这里聚类的数目一般设置得不应过大，一般设置为1024差不多，这种可以以比较快的速度完成聚类过程。得到了聚类中心后，针对每一个样本$x_i$，找到其距离最近的类中心$c_i$后，两者相减得到样本$x_i$的残差向量($x_i-c_i$)，后面剩下的过程，就是针对($x_i-c_i$)的PQ乘积量化过程，此过程不再赘述。
+
+在查询的时候，通过相同的粗量化，可以快速定位到查询向量属于哪个$c_i$（即在哪一个感兴趣区域），然后在该感兴趣区域按上面所述的PQ乘积量化距离计算方式计算距离。
 
 \section{拓展查询}
 
