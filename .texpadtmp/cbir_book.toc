@@ -17,19 +17,19 @@
 \contentsline {subsection}{\numberline {2.4.1}全平台}{8}{subsection.2.4.1}
 \contentsline {subsection}{\numberline {2.4.2}跳过安装}{8}{subsection.2.4.2}
 \contentsline {chapter}{\numberline {3}载入、显示及保存}{9}{chapter.3}
-\contentsline {chapter}{\numberline {4}图像基础}{12}{chapter.4}
-\contentsline {chapter}{\numberline {5}特征编码}{13}{chapter.5}
-\contentsline {section}{\numberline {5.1}BoF词袋模型}{13}{section.5.1}
-\contentsline {section}{\numberline {5.2}VLAD局部聚合向量}{13}{section.5.2}
-\contentsline {section}{\numberline {5.3}Fisher Vector}{14}{section.5.3}
-\contentsline {subsection}{\numberline {5.3.1}Fisher核}{14}{subsection.5.3.1}
-\contentsline {subsection}{\numberline {5.3.2}Fisher核拓展到图像}{15}{subsection.5.3.2}
-\contentsline {chapter}{\numberline {6}ANN搜索}{17}{chapter.6}
-\contentsline {section}{\numberline {6.1}矩阵相乘}{17}{section.6.1}
-\contentsline {section}{\numberline {6.2}基于树的方法}{17}{section.6.2}
-\contentsline {section}{\numberline {6.3}哈希方法}{17}{section.6.3}
-\contentsline {section}{\numberline {6.4}矢量量化方法}{18}{section.6.4}
-\contentsline {subsection}{\numberline {6.4.1}PQ乘积量化}{18}{subsection.6.4.1}
-\contentsline {subsection}{\numberline {6.4.2}倒排乘积量化}{20}{subsection.6.4.2}
-\contentsline {section}{\numberline {6.5}拓展查询}{20}{section.6.5}
-\contentsline {chapter}{参考文献}{22}{chapter*.4}
+\contentsline {chapter}{\numberline {4}图像基础}{11}{chapter.4}
+\contentsline {chapter}{\numberline {5}特征编码}{12}{chapter.5}
+\contentsline {section}{\numberline {5.1}BoF词袋模型}{12}{section.5.1}
+\contentsline {section}{\numberline {5.2}VLAD局部聚合向量}{12}{section.5.2}
+\contentsline {section}{\numberline {5.3}Fisher Vector}{13}{section.5.3}
+\contentsline {subsection}{\numberline {5.3.1}Fisher核}{13}{subsection.5.3.1}
+\contentsline {subsection}{\numberline {5.3.2}Fisher核拓展到图像}{14}{subsection.5.3.2}
+\contentsline {chapter}{\numberline {6}ANN搜索}{16}{chapter.6}
+\contentsline {section}{\numberline {6.1}矩阵相乘}{16}{section.6.1}
+\contentsline {section}{\numberline {6.2}基于树的方法}{16}{section.6.2}
+\contentsline {section}{\numberline {6.3}哈希方法}{16}{section.6.3}
+\contentsline {section}{\numberline {6.4}矢量量化方法}{17}{section.6.4}
+\contentsline {subsection}{\numberline {6.4.1}PQ乘积量化}{17}{subsection.6.4.1}
+\contentsline {subsection}{\numberline {6.4.2}倒排乘积量化}{19}{subsection.6.4.2}
+\contentsline {section}{\numberline {6.5}拓展查询}{19}{section.6.5}
+\contentsline {chapter}{参考文献}{21}{chapter*.4}
