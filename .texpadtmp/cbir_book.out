@@ -24,12 +24,13 @@
 \BOOKMARK [1][]{section.5.3}{5.3\040Fisher\040Vector}{chapter.5}% 24
 \BOOKMARK [2][]{subsection.5.3.1}{5.3.1 Fisher核}{section.5.3}% 25
 \BOOKMARK [2][]{subsection.5.3.2}{5.3.2 Fisher核拓展到图像}{section.5.3}% 26
-\BOOKMARK [0][]{chapter.6}{6 ANN搜索}{}% 27
-\BOOKMARK [1][]{section.6.1}{6.1 矩阵相乘}{chapter.6}% 28
-\BOOKMARK [1][]{section.6.2}{6.2 基于树的方法}{chapter.6}% 29
-\BOOKMARK [1][]{section.6.3}{6.3 哈希方法}{chapter.6}% 30
-\BOOKMARK [1][]{section.6.4}{6.4 矢量量化方法}{chapter.6}% 31
-\BOOKMARK [2][]{subsection.6.4.1}{6.4.1 PQ乘积量化}{section.6.4}% 32
-\BOOKMARK [2][]{subsection.6.4.2}{6.4.2 倒排乘积量化}{section.6.4}% 33
-\BOOKMARK [1][]{section.6.5}{6.5 拓展查询}{chapter.6}% 34
-\BOOKMARK [0][]{chapter*.4}{参考文献}{}% 35
+\BOOKMARK [2][]{subsection.5.3.3}{5.3.3 Fisher Vector实验}{section.5.3}% 27
+\BOOKMARK [0][]{chapter.6}{6 ANN搜索}{}% 28
+\BOOKMARK [1][]{section.6.1}{6.1 矩阵相乘}{chapter.6}% 29
+\BOOKMARK [1][]{section.6.2}{6.2 基于树的方法}{chapter.6}% 30
+\BOOKMARK [1][]{section.6.3}{6.3 哈希方法}{chapter.6}% 31
+\BOOKMARK [1][]{section.6.4}{6.4 矢量量化方法}{chapter.6}% 32
+\BOOKMARK [2][]{subsection.6.4.1}{6.4.1 PQ乘积量化}{section.6.4}% 33
+\BOOKMARK [2][]{subsection.6.4.2}{6.4.2 倒排乘积量化}{section.6.4}% 34
+\BOOKMARK [1][]{section.6.5}{6.5 拓展查询}{chapter.6}% 35
+\BOOKMARK [0][]{chapter*.9}{参考文献}{}% 36

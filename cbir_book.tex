@@ -69,6 +69,12 @@
 
 随着图像数据快速增长，针对基于文本的图像检索方法日益凸现的问题，在1992年美国国家科学基金会就图像数据库管理系统新发展方向达成一致共识，即表示索引图像信息的最有效方式应该是基于图像内容自身的。自此，基于内容的图像检索技术便逐步建立起来，并在近十多年里得到了迅速的发展。典型的基于内容的图像检索基本框架如上图1.1所示，它利用计算机对图像进行分析，建立图像特征矢量描述并存入图像特征库，当用户输入一张查询图像时，用相同的特征提取方法提取查询图像的特征得到查询向量，然后在某种相似性度量准则下计算查询向量到特征库中各个特征的相似性大小，最后按相似性大小进行排序并顺序输出对应的图片。基于内容的图像检索技术将图像内容的表达和相似性度量交给计算机进行自动的处理，克服了采用文本进行图像检索所面临的缺陷，并且充分发挥了计算机长于计算的优势，大大提高了检索的效率，从而为海量图像库的检索开启了新的大门。不过，其缺点也是存在的，主要表现为特征描述与高层语义之间存在着难以填补的语义鸿沟，并且这种语义鸿沟是不可消除的。
 
+\begin{figure}[!hbtp]
+\centering  %使图片居中显示
+\includegraphics[width=0.8\textwidth]{./figure/cbirFramework.eps}
+\caption{PQ量化索引示意过程\label{pq_ex1}}
+\end{figure}
+
 基于内容的图像检索技术在电子商务、皮革布料、版权保护、医疗诊断、公共安全、街景地图等工业领域具有广阔的应用前景。在电子商务方面，谷歌的Goggles、 阿里巴巴的拍立淘等闪拍购物应用允许用户抓拍上传至服务器端，在服务器端运行图片检索应用从而为用户找到相同或相似的衣服并提供购买店铺的链接；在皮革纺织工业中，皮革布料生产商可以将样板拍成图片，当衣服制造商需要某种纹理的皮革布料时，可以检索库中是否存在相同或相似的皮革布料，使得皮革布料样本的管理更加便捷；在版权保护方面，提供版权保护的服务商可以应用图像检索技术进行商标是否已经注册了的认证管理；在医疗诊断方面，医生通过检索医学影像库找到多个病人的相似部位，从而可以协助医生做病情的诊断……基于内容的图像检索技术已经深入到了许许多多的领域，为人们的生活生产提供了极大的便利。
 
 \section{基于内容的图像检索技术}
@@ -76,6 +82,12 @@
 \subsection{相同物体图像检索}
 
 相同物体图像检索是指对查询图像中的某一物体，从图像库中找出包含有该物体的图像。这里用户感兴趣的是图像中包含的特定物体或目标，并且检索到的图片应该是包含有该物体的那些图片。如1.3图所示，给定一幅”蒙娜丽莎”的画像，相同物体检索的目标就是要从图像库中检索出那些包含有”蒙娜丽莎”人物的图片，在经过相似性度量排序后这些包含有”蒙娜丽莎”人物的图片尽可能的排在检索结果的前面。相似物体检索在英文文献中一般称为物体检索(Object Retrieval)，近似样本搜索或检测(Duplicate Search or Detection)也可以归类于相同物体的检索，并且相同物体检索方法可以直接应用到近似样本搜索或检测上。相同物体检索不论是在研究还是在商业图像搜索产业中都具有重大的价值，比如购物应用中搜索衣服鞋子、人脸检索等。
+
+\begin{figure}[!hbtp]
+\centering  %使图片居中显示
+\includegraphics[width=0.8\textwidth]{./figure/challengeObjectRetrieval.eps}
+\caption{PQ量化索引示意过程\label{pq_ex1}}
+\end{figure}
 
 对于相同物体图像检索，在检索相同的物体或目标时，易受拍摄环境的影响，比如光照变化、尺度变化、视角变化、遮挡以及背景的杂乱等都会对检索结果造成较大的影响，图1.3左图给出了这几种变化的例子，此外，对于非刚性的物体，在进行检索时，物体的形变也会对检索结果造成很大的影响。
 
@@ -321,7 +333,11 @@ $$G^X_\lambda = \nabla log \mu_\lambda(X)$$
 
 给定图像I，假设从该图像中提取到了$T$个$D$维的局部描述子，比如SIFT，
 
-\begin{lstlisting}[language=c++]
+\subsection{Fisher Vector实验}
+
+提取SIFT特征，这里我们采用Hesaff SIFT，为了提取Hesaff SIFT，首先需要编译得到二进制文件，其后，使用下面的Python脚本可完成Hesaff SIFT特征的提取，当然，也可以直接使用OpenCV的SIFT特征。
+
+\begin{lstlisting}[language=python]
 #!/usr/bin/env python
 # encoding: utf-8
 # Author: yongyuan.name
@@ -364,6 +380,182 @@ if __name__ == '__main__':
     pool.join()
 \end{lstlisting}
 
+在提取到SIFT特征后，便可以使用GMM模型进行聚类，得到GMM的参数了：
+
+\begin{lstlisting}[language=python]
+#!/usr/bin/env python
+# encoding: utf-8
+# Author: yongyuan.name
+
+import os
+import numpy as np
+from yael import ynumpy
+
+txt_path = '/home/yuanyong/py/fv_retrieval/oxford.txt'
+sift_dir = '/home/yuanyong/py/fv_retrieval/oxford_hesaff_sift'
+
+with open(txt_path, 'r') as f:
+    content = f.readlines()
+    content = [x.strip() for x in content]
+
+
+all_desc = []
+for i, line in enumerate(content):
+    print "%d(%d): %s" %(i+1, len(content), line)
+    hesaff_path = os.path.join(sift_dir, os.path.splitext(os.path.basename(line))[0] + '.hesaff.sift')
+    hesaff_info = np.loadtxt(hesaff_path, skiprows=2)
+    if hesaff_info.shape[0] == 0:
+       continue
+    elif hesaff_info.shape[0] > 0 and len(hesaff_info.shape) == 1:
+        desc = hesaff_info[5:]
+        all_desc.append(desc)
+    elif hesaff_info.shape[0] > 0 and len(hesaff_info.shape) > 1:
+        desc = hesaff_info[:, 5:]
+        all_desc.append(desc)
+
+
+# make a big matrix with all image descriptors
+all_desc = np.sqrt(np.vstack(all_desc))
+#n_sifts = all_desc.shape[0]
+#for i in range(n_sifts):
+#    if np.linalg.norm(all_desc[i], ord=2) == 0.0:
+#        continue
+#    all_desc[i] = all_desc[i]/np.linalg.norm(all_desc[i], ord=2)
+
+# sift: root-sift
+#n_sifts = all_desc.shape[0]
+#for i in range(n_sifts):
+    #if np.linalg.norm(all_desc[i], ord=1) == 0.0:
+    #    continue
+    #all_desc[i] = np.sqrt(all_desc[i]/np.linalg.norm(all_desc[i], ord=1))
+
+# sift: sign(x)log(1 + |x|)
+#n_sifts = all_desc.shape[0]
+#for i in range(n_sifts):
+#    all_desc[i] = np.sign(all_desc[i]) * np.log(1.0 + np.abs(all_desc[i]))
+
+
+k = 128
+n_sample = 256 * 1000
+
+# choose n_sample descriptors at random
+np.random.seed(1024)
+sample_indices = np.random.choice(all_desc.shape[0], n_sample)
+sample = all_desc[sample_indices]
+
+# until now sample was in uint8. Convert to float32
+sample = sample.astype('float32')
+
+# compute mean and covariance matrix for the PCA
+mean = sample.mean(axis = 0)
+sample = sample - mean
+cov = np.dot(sample.T, sample)
+
+# compute PCA matrix and keep only 64 dimensions
+eigvals, eigvecs = np.linalg.eig(cov)
+perm = eigvals.argsort()                   # sort by increasing eigenvalue
+pca_transform = eigvecs[:, perm[96:128]]   # eigenvectors for the 64 last eigenvalues
+
+# transform sample with PCA (note that numpy imposes line-vectors,
+# so we right-multiply the vectors)
+sample = np.dot(sample, pca_transform)
+
+# train GMM
+print "start train GMM ......."
+gmm = ynumpy.gmm_learn(sample, k, nt = 400, niter = 2000, seed = 0, redo = 1, use_weights = True)
+
+np.save("./oxford_gmm_root_32/w.gmm", gmm[0])
+np.save("./oxford_gmm_root_32/mu.gmm", gmm[1])
+np.save("./oxford_gmm_root_32/sigma.gmm", gmm[2])
+np.save("./oxford_gmm_root_32/mean.gmm", mean)
+np.save("./oxford_gmm_root_32/pca_transform.gmm", pca_transform)
+\end{lstlisting}
+
+\begin{lstlisting}[language=python]
+#!/usr/bin/env python
+# encoding: utf-8
+# Author: yongyuan.name
+
+import os,h5py
+import numpy as np
+from yael import ynumpy
+
+
+h5f = h5py.File('./oxford_gmm_root_32/fisher_8192.h5', 'w')
+weights = np.load('./oxford_gmm_root_32/w.gmm.npy')
+mu = np.load('./oxford_gmm_root_32/mu.gmm.npy')
+sigma = np.load('./oxford_gmm_root_32/sigma.gmm.npy')
+mean = np.load('./oxford_gmm_root_32/mean.gmm.npy')
+pca_transform = np.load('./oxford_gmm_root_32/pca_transform.gmm.npy')
+
+gmm = [weights, mu, sigma]
+
+# 
+txt_path = '/home/yuanyong/py/fv_retrieval/oxford.txt'
+with open(txt_path, 'r') as f:
+    content = f.readlines()
+    content = [x.strip() for x in content]
+
+# 
+features = []
+image_names = []
+for i, line in enumerate(content):
+    img_name = os.path.basename(line)
+    print "%d(%d): %s" %(i+1, len(content), img_name)
+    hesaff_path = os.path.join('/home/yuanyong/py/fv_retrieval/oxford_hesaff_sift', os.path.splitext(os.path.basename(line))[0] + '.hesaff.sift')
+    hesaff_info = np.loadtxt(hesaff_path)
+    if hesaff_info.shape[0] == 0:
+        hesaff_info = np.zeros((1, 133), dtype = 'float32')
+    elif hesaff_info.shape[0] > 0 and len(hesaff_info.shape) == 1:
+        hesaff_info = hesaff_info.reshape([1, 133])
+
+    image_desc = np.sqrt(hesaff_info[:, 5:])
+    #n_sifts = image_desc.shape[0]
+    #for i in range(n_sifts):
+    #    if np.linalg.norm(image_desc[i], ord=2) == 0.0:
+    #        continue
+    #    image_desc[i] = image_desc[i]/np.linalg.norm(image_desc[i], ord=2)
+
+    # root-sift
+    #n_sifts = image_desc.shape[0]
+    #for i in range(n_sifts):
+    #    if np.linalg.norm(image_desc[i], ord=1) == 0.0:
+    #        continue
+    #    image_desc[i] = np.sqrt(image_desc[i]/np.linalg.norm(image_desc[i], ord=1))
+
+    #n_sifts = image_desc.shape[0]
+    #for i in range(n_sifts):
+    #    image_desc[i] = np.sign(image_desc[i]) * np.log(1.0 + np.abs(image_desc[i]))
+
+    # apply the PCA to the image descriptor
+    image_desc = np.dot(image_desc - mean, pca_transform)
+    image_desc = image_desc.astype(np.float32)
+
+    # compute the Fisher vector, using only the derivative w.r.t mu
+    fv = ynumpy.fisher(gmm, image_desc, include = ['mu','sigma'])
+    features.append(fv)
+    image_names.append(img_name)
+
+# make one matrix with all FVs
+features = np.vstack(features)
+
+# normalizations are done on all descriptors at once
+
+# power-normalization
+features = np.sign(features) * np.abs(features) ** 0.5
+
+# L2 normalize
+#norms = np.sqrt(np.sum(image_fvs ** 2, 1))
+#image_fvs /= norms.reshape(-1, 1)
+
+# save feats
+print "number samples: %d, dimension: %d, number names: %d" %(features.shape[0], features.shape[1], len(image_names))
+h5f['feats'] = features
+h5f['names'] = image_names
+h5f.close()	
+\end{lstlisting}
+
+
 每幅图像由像素集组成。像素是一幅图像的{\color{red}{原材料，积木}}。它是图像的最小单元。
 
 一般情况下，像素通常采用两种方式进行表示：灰度和彩色。在灰度图像中，每一个像素的像素值在0到255之间，“0”代表“黑色”，“1”表示“白色”。
@@ -378,6 +570,12 @@ if __name__ == '__main__':
 
 对KD树选择从哪一维度进行开始划分的标准，采用的是求每一个维度的方差，然后选择方差最大的那个维度开始划分。这里有一个比较有意思的问题是：为何要选择方差作为维度划分选取的标准？我们都知道，方差的大小可以反映数据的波动性。方差大表示数据波动性越大，选择方差最大的开始划分空间，可以使得所需的划分面数目最小，反映到树数据结构上，可以使得我们构建的KD树的树深度尽可能的小。为了更进一步加深对这一点的认识，可以以一个简单的示例图说明：
 
+\begin{figure}[!hbtp]
+\centering  %使图片居中显示
+\includegraphics[width=0.8\textwidth]{./figure/KD-LSH.eps}
+\caption{PQ量化索引示意过程\label{pq_ex1}}
+\end{figure}
+
 假设不以方差最大的x轴为划分面($$x_var = 16.25$$)，而是以y轴($$y_var = 0.0$$)轴为划分面，如图中虚线所示，可以看到，该划分使得图中的四个点都落入在同一个子空间中，从而使得该划分成为一个无效的划分，体现在以树结构上，就是多了一层无用的树深度。而以x轴为初始划分则不同(图像实线所示)，以x轴为初始划分可以得到数据能够比较均匀的散布在左右两个子空间中，从而使得整体的查找时间能够最短。注意，在实际的kd树划分的时候，并不是图中虚线所示，而是选取中值最近的点。上面示意图构建的具体kd树如下所示：
 
 一般而言，在空间维度比较低的时候，KD树是比较高效的，当空间维度较高时，可以采用下面的哈希方法或者矢量量化方法。
@@ -388,6 +586,12 @@ if __name__ == '__main__':
 
 小白菜读书那会儿，研究了很多的哈希图像检索方法（见hashing-baseline-for-image-retrieval），有时候总会给一些工程实践上的错觉（在今天看来是这样的），即新论文里的方法远远碾压经典的方法，那是不是在实际中这些方法就很work很好使。实践的经历告诉小白菜，还是经典的东西更靠谱，不是因为新的方法不好，而是新的事物需要经过时间的沉淀与优化。
 
+\begin{figure}[!hbtp]
+\centering  %使图片居中显示
+\includegraphics[width=0.8\textwidth]{./figure/hashingframework.eps}
+\caption{PQ量化索引示意过程\label{pq_ex1}}
+\end{figure}
+
 所以，这里不会对近两年的哈希方法做铺陈，而是聊一聊工程中在要使用到哈希方法的场景下一般都会选用的局部敏感哈希（Local Sensitive Hashing, LSH）。
 
 \section{矢量量化方法}
@@ -397,6 +601,12 @@ if __name__ == '__main__':
 \subsection{PQ乘积量化}
 
 PQ乘积量化的核心思想还是聚类，或者说具体应用到ANN近似最近邻搜索上，K-Means是PQ乘积量化子空间数目为1的特例。PQ乘积量化生成码本和量化的过程可以用如下图示来说明：
+
+\begin{figure}[!hbtp]
+\centering  %使图片居中显示
+\includegraphics[width=0.8\textwidth]{./figure/pq.eps}
+\caption{PQ量化索引示意过程\label{pq_ex1}}
+\end{figure}
 
 在训练阶段，针对N个训练样本，假设样本维度为128维，我们将其切分为4个子空间，则每一个子空间的维度为32维，然后我们在每一个子空间中，对子向量采用K-Means对其进行聚类(图中示意聚成256类)，这样每一个子空间都能得到一个码本。这样训练样本的每个子段，都可以用子空间的聚类中心来近似，对应的编码即为类中心的ID。如图所示，通过这样一种编码方式，训练样本仅使用的很短的一个编码得以表示，从而达到量化的目的。对于待编码的样本，将它进行相同的切分，然后在各个子空间里逐一找到距离它们最近的类中心，然后用类中心的id来表示它们，即完成了待编码样本的编码。
 
