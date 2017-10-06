@@ -54,6 +54,9 @@
 %结束%
 
 
+\usepackage{amsmath}
+
+
 \begin{document}
 \maketitle
 \tableofcontents
@@ -121,7 +124,48 @@
 
 随着视觉数据的快速增长，面向大规模视觉数据的基于内容的图像检索技术不论是在商业应用还是计算机视觉社区都受到了极大的关注。传统的暴力(brute-force) 搜索方法(又称线性扫描)通过逐个与数据库中的每个点进行相似性计算然后进行排序，这种简单粗暴的方式虽然很容易实现，但是会随着数据库的大小以及特征维度的增加其搜索代价也会逐步的增加，从而使得暴力搜索仅适用于数据量小的小规模图像数据库，在大规模图像库上这种暴力搜索的方式不仅消耗巨大的计算资源，而且单次查询的响应时间会随着数据样本的增加以及特征维度的增加而增加，为了降低搜索的空间的空间复杂度与时间复杂度，在过去的十几年里研究者们找到了一种可供替代的方案— 近似最近邻(ANN, Approximate Nearest Neighbor)搜索方法，并提出了很多高效的检索技术，其中最成功的方法包括基于树结构的图像检索方法、基于哈希的图像检索方法和基于向量量化的图像检索方法。
 
-\chapter{Python及需要的安装包}
+\chapter{工业常用工具}
+
+\section{PCA}
+
+\begin{lstlisting}[language=c++]
+
+/* Train PCA using OpenCV
+ Input:
+     data:             n*d
+     num_reduced_dim:  reduded number
+     filename:         path of saved
+ */
+void trainPCA(cv::Mat &data, int num_reduced_dim, std::string &filename){
+    if(data.cols <= 0 || data.rows <= 0){
+        std::cout << "data is empty, training is failed" << std::endl;
+    }
+    //PCA pca(data, cv::Mat(), CV_PCA_DATA_AS_ROW, 1.0);
+    std::cout << "start traing PCA model" << std::endl;
+    cv::PCA pca(data, cv::Mat(), CV_PCA_DATA_AS_ROW, num_reduced_dim);
+    std::cout << "traing PCA model is finished" << std::endl;
+    std::cout << "start writing PCA model" << std::endl;
+    cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+    pca.write(fs);
+    std::cout << "writing PCA model is finished" << std::endl;
+}
+
+
+/* Load PCA model
+Input:
+    filename:         path of saved
+ */
+cv::PCA loadPCA(std::string &filename){
+    cv::PCA pca;
+    cv::FileStorage fs(filename, cv::FileStorage::READ);
+    pca.read(fs.root());
+    return pca;
+}
+\end{lstlisting}
+
+\section{KMeans}
+
+\chapter{图像特征表达}
 
 要探索计算机视觉世界，首先我们需要安装一些安装包。作为探索计算机视觉之旅的起始，要安装这些安装包特别是OpenCV是非常冗余乏味的，它依赖于你所使用的操作系统。我已经试着将这些安装说明简化成了一份简短的使用指南，不过，正如你所了解的，锁着项目、网站的改变，这些安装说明是会变化的！如果你在安装中遇到了问题，确保查看安装包的网站以获得最新安装说明。
 
@@ -133,33 +177,27 @@
 
 现在，让我们来安装这些安装包！
 
-\section{NumPy和SciPy}
+\section{局部特征}
 
 NumPy是一个用于Python编程语言的库，它对大型多维数组提供支持。为什么NumPy很重要呢？原因是使用NumPy，我们可以将图像表示为一个多维数组。将图像表示为NumPy数组，不仅易于计算和资源得以有效利用，而且一些其他的图像处理操作和机器学习库也是用NumPy数组来表示的。此外，使用NumPy内置的高水准数学函数，我们能在一幅图像上做快速数值分析。
 
 与NumPy形影不离的是SciPy。SciPy为科学和技术计算提供了更多的支持。
 
-\subsection{Windows}
+\subsection{SIFT特征}
 
 到目前为止，在你的Windows系统上安装NumPy和SciPy最简单的方式是\url{http://www.scipy.org/install.html}下载并安装二进制分发包。
 
-\subsection{OSX}
+\subsection{HOG特征}
 
 如果你运行的是OSX 10.7.0(Lion)或更高版本，NumPy和SciPy已经预先安装好了。
 
 不过，我喜欢安装ScipySuperpack。它包含了最新版的NumPy、SciPy、Matplotlib和其他非常有用的安装包，比如ipython、pandas和scikit-learn。所有的这些安装包是值得安装的，并且如果你在\url{www.PyImageSearch.com}上阅读我的博客，你会发现这些安装包我用得非常的频繁。
 
-\subsection{Linux}
-
-很多Linux发行版，比如Ubuntu，都预先安装有NumPy并且已经是配置好了的。
-
-如果你想要最新版的NumPy和SciPy，你可以从源代码进行编译，不过最简单的方法还是用一个包管理器，比如在Ubuntu上用apt-get。
-
-\section{Matplotlib}
+\section{全局特征}
 
 用一句简洁的话概括，matplotlib是一个绘图库。如果你以前用过MATLAB，在matplotlib环境里你很可能会觉得非常的舒适。在分析图像的时候，我们会用到它。不管是画图像直方图还是只是简单地查看图像本身，matplotlib是一个非常有用的工具，你值得将它纳入到你的工具箱中。
 
-\subsection{全平台}
+\subsection{CNN特征}
 
 Matplotlib可以在\url{http://matplotlib.org/}上下载。如果你已经安装了ScipySuperpack，那么Matplotlib就已经在你的计算机上安装了。你也可以通过easy\_install或pip来安装它。
 
@@ -323,19 +361,92 @@ void vlad_compute(int k, int d, const float *centroids,
 
 \subsection{Fisher核}
 
-在空间$\chi$中，某样本$X$存在$T$个观测变量，记为$X={x_t, t=1 \dots T}$。对应到图像上，样本$X$为图像$I$提取到的$T$个维度为$D$局部特征，比如SIFT。设$\mu_\lambda$为概率密度函数，并且函数包含有$M$个参数，即$\lambda = [\lambda_1, \dots, \lambda_M]$。根据生成式原理，空间样本$\chi$中的元素$X$可以使用该概率密度函数进行建模。在统计学上，分数函数（score funciton）可以由对数似然函数的梯度给出，即：
+在空间$\chi$中，某样本$X$存在$T$个观测量，记为$X = \lbrace x_t, t=1 \dots T \rbrace$。对应到图像上，样本$X$为图像$I$提取到的$T$个$D$维的局部描述子，比如SIFT。设$\mu_\lambda$为概率密度函数，该函数包含有$M$个参数，即$\lambda = [\lambda_1, \dots, \lambda_M]$。根据生成式原理，空间$\chi$中的元素$X$可以由概率密度函数进行建模。在统计学上，分数函数（score funciton）可以由对数似然函数的梯度给出，即：
+\begin{equation}
+G^X_\lambda = \nabla log u_\lambda(X)
+\label{sfun}
+\end{equation}
 
-$$G^X_\lambda = \nabla log \mu_\lambda(X)$$ 
+上式\eqref{sfun}对数函数的梯度，在数学形式上为对数似然函数的一阶偏导，它描述了每一个参数$\lambda_i$对该生成式过程的贡献度，换言之，该分数函数$G^X_\lambda$描述了生成式模型$\mu_\lambda$为了更好的拟合数据$X$，该模型中的参数需要做怎样的调整。又因为$G^X_\lambda \in R^M $是一个维度为$M$维的向量，所以该分数函数的维度仅依赖于$\lambda $中参数的数目$M$, 而于观测样本的数目$T$无关。此外，一般情况下，该分数函数的期望$E[ G^X_\lambda ] = 0 $，这一点对于下面讲到的Fisher信息矩物理意义的得到非常重要。
 
-上面对数函数的梯度描述了$M$个参数中，每一个参数$\lambda_i$对该生成式过程的贡献度。
+根据信息几何理论，含参分布$\Gamma = \lbrace \mu_\lambda, \lambda \in \Lambda \rbrace$可以视为一个黎曼流形$M_\Lambda$，其局部度量方式可以由Fisher信息矩(Fisher Information Matrix, FIM）$F_\lambda \in R^{M \times M}$:
+\begin{equation}
+F_{\lambda} = E_{ x \sim u_\lambda } [ G^X_\lambda (G^X_\lambda)^T ]
+\label{fim}
+\end{equation}
 
-\subsection{Fisher核拓展到图像}
+从上式可以看到，Fisher信息矩是分数函数的二阶矩。在一般条件下很容易证明（注意$E[ G^X_\lambda ] = 0 $）：
+\begin{equation}
+\begin{split}
+F_{\lambda} &= E_{ x \sim u_\lambda } [ G^X_\lambda (G^X_\lambda)^T ] \\
+            &= E[(G^X_\lambda)^2] \\
+            &= E[(G^X_\lambda)^2] - E[ G^X_\lambda ]^2 \\
+            &= Var[G^X_\lambda]
+\end{split}
+\label{fim1}
+\end{equation}
 
-给定图像I，假设从该图像中提取到了$T$个$D$维的局部描述子，比如SIFT，
+从上式\eqref{fim1}可以看到，Fisher信息矩是用来估计最大似然估计（Maximum Likelihood Estimate, MLE）的方程的方差。它直观的表述就是，在独立性假设的条件下，随着收集的观测数据越来越多，这个方差由于是一个相加的形式，因而Fisher信息矩也就变的越来越大，也就表明得到的信息越来越多。【注：此处引用了\href{fisher information 的直观意义是什么？}{https://www.zhihu.com/question/26561604}】
+
+对于两组不同的观察样本$X$和$Y$，Jaakkola和Haussler提出了使用Fisher核来度量它们之间的相似性，其数学表达形式为：
+\begin{equation}
+K_FK(X, Y) = (G^X_\lambda)^T F_\lambda^{-1} G^X_\lambda
+\label{fk}
+\end{equation}
+
+又因为$F_{\lambda}$是半正定的，所以其逆矩阵是存在的。使用cholesky分解可以得到$F_\lambda^{-1} = (L_\lambda)^T L_\lambda$，式\eqref{fk}可以写成内积的表示形式：
+\begin{equation}
+K_FK(X, Y) = (\wp^X_\lambda)^T \wp^Y_\lambda
+\label{fk1}
+\end{equation}
+
+其中,
+\begin{equation}
+\wp^X_\lambda = L_\lambda G^X_\lambda = L_\lambda \nabla_\lambda log u_\lambda(X)
+\label{wp_lambda}
+\end{equation}
+
+上式\eqref{wp_lambda}是$L_\lambda$对$G^X_\lambda$的归一化，我们将$\wp^X_\lambda$称为Fisher向量，该Fisher向量$\wp^X_\lambda$等于梯度向量$G^X_\lambda$的维度，又由于$G^X_\lambda$的维度仅与概率密度函数的参数数目$M$有关，所以空间$\chi$中任意样本$X$的$T$个观测量最终都可以表示成一固定维度的向量。通过使用$\wp^X_\lambda$算子，使得非线性核相似性度量问题转化为线性问题。这种变换带来的一个明显的优势是，在分类的时候可以采用更高效的线性分类器。
+
+\subsection{图像的Fisher向量}
+
+设$X = \lbrace x_t, t=1 \dots T \rbrace$是从一幅图像上提取到的$T$个局部描述子，比如SIFT。假设这$T$个局部描述子是相互独立的（注意此假设提前），则公式\eqref{wp_lambda}可以写成如下形式：
+\begin{equation}
+\wp^X_\lambda = \sum_{n=1}^{T} L_\lambda \nabla_\lambda log u_\lambda(x_t)
+\label{sum_wp_lambda}
+\end{equation}
+
+从式\eqref{sum_wp_lambda}可知，在独立性假设的前提下，Fisher向量是图像中每一个局部描述子归一化梯度统计$L_\lambda \nabla_\lambda log u_\lambda(x_t)$的求和。我们可以定义如下操作：
+\begin{equation}
+x_t \longrightarrow \varphi_{FK}(x_t) = L_\lambda \nabla_\lambda log u_\lambda(x_t)
+\label{operator_wp_lambda}
+\end{equation}
+
+该操作将任意一个局部描述子$x_t$嵌入到高维空间中，使得其更易于使用线性分类器进行分类。在得到式\eqref{wp_lambda}的时候，有一个基本的前提假设，即局部描述子之间是相互独立的，也就是在提取图像的局部描述子的时候每个小区块是相互独立的，显然这样一种假设对于图像而言是不成立的，特别是当每个小区快中间有重叠的时候。对于这个问题的讨论，我们放在后面展开。
+
+由于高斯混合模型（Gaussian Mixture Model, GMM）可以以任意精度去逼近任意连续分布，所以对概率密度函数$u_\lambda$，选用高斯混合模型。值得一提的是，在计算机视觉文献中，将用来对图像局部特征进行建模的高斯混合模型称为概率视觉词汇（Probabilistic Visual Vocabulary）。对于有$K$个组分的高斯混合模型，其包含的参数为$\lambda = \lbrace w_k, \mu_k, \Sigma_k, k = 1, \cdots, K \rbrace$, 其中$\mu_k$、$\mu$、$\Sigma_k$分别是第$k$个高斯的混合权重，均值向量和协方差矩阵。因此，概率密度函数：
+\begin{equation}
+u_\lambda(x) = \sum_{n=1}^{K} w_k u_k(x)
+\label{u_lambda}
+\end{equation}
+其中,
+\begin{equation}
+u_k(x) = \frac{1}{(2\pi)^{D/2} |\Sigma_k|^{1/2}} exp \lbrace - \frac{1}{2} (x-\mu_k)^T \Sigma_k^{-1} (x-\mu_k) \rbrace
+\end{equation}
+
+为了保证$u_\lambda(x)$是一个有意义的的概率密度函数，会对其做如下约束：
+\begin{equation}
+\begin{split}
+& \sum_{n=1}^{K} w_k = 1 \\
+& w_k \geq 0 (k = 1, \cdots, K)
+\end{split}
+\end{equation}
 
 \subsection{Fisher Vector实验}
 
 提取SIFT特征，这里我们采用Hesaff SIFT，为了提取Hesaff SIFT，首先需要编译得到二进制文件，其后，使用下面的Python脚本可完成Hesaff SIFT特征的提取，当然，也可以直接使用OpenCV的SIFT特征。
+
+
 
 \begin{lstlisting}[language=python]
 #!/usr/bin/env python
