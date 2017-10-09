@@ -3,36 +3,41 @@
 \BOOKMARK [2][]{subsection.1.1.1}{1.1.1 相同物体图像检索}{section.1.1}% 3
 \BOOKMARK [2][]{subsection.1.1.2}{1.1.2 相同类别图像检索}{section.1.1}% 4
 \BOOKMARK [2][]{subsection.1.1.3}{1.1.3 大规模图像检索特点}{section.1.1}% 5
-\BOOKMARK [0][]{chapter.2}{2 工业常用工具}{}% 6
-\BOOKMARK [1][]{section.2.1}{2.1\040PCA}{chapter.2}% 7
-\BOOKMARK [1][]{section.2.2}{2.2\040KMeans}{chapter.2}% 8
-\BOOKMARK [0][]{chapter.3}{3 图像特征表达}{}% 9
-\BOOKMARK [1][]{section.3.1}{3.1 局部特征}{chapter.3}% 10
-\BOOKMARK [2][]{subsection.3.1.1}{3.1.1 SIFT特征}{section.3.1}% 11
-\BOOKMARK [2][]{subsection.3.1.2}{3.1.2 HOG特征}{section.3.1}% 12
-\BOOKMARK [1][]{section.3.2}{3.2 全局特征}{chapter.3}% 13
-\BOOKMARK [2][]{subsection.3.2.1}{3.2.1 CNN特征}{section.3.2}% 14
-\BOOKMARK [1][]{section.3.3}{3.3\040OpenCV}{chapter.3}% 15
-\BOOKMARK [2][]{subsection.3.3.1}{3.3.1 Windows和linux}{section.3.3}% 16
-\BOOKMARK [2][]{subsection.3.3.2}{3.3.2\040OSX}{section.3.3}% 17
-\BOOKMARK [1][]{section.3.4}{3.4\040Mahotas}{chapter.3}% 18
-\BOOKMARK [2][]{subsection.3.4.1}{3.4.1 全平台}{section.3.4}% 19
-\BOOKMARK [2][]{subsection.3.4.2}{3.4.2 跳过安装}{section.3.4}% 20
-\BOOKMARK [0][]{chapter.4}{4 载入、显示及保存}{}% 21
-\BOOKMARK [0][]{chapter.5}{5 图像基础}{}% 22
-\BOOKMARK [0][]{chapter.6}{6 特征编码}{}% 23
-\BOOKMARK [1][]{section.6.1}{6.1 BoF词袋模型}{chapter.6}% 24
-\BOOKMARK [1][]{section.6.2}{6.2 VLAD局部聚合向量}{chapter.6}% 25
-\BOOKMARK [1][]{section.6.3}{6.3\040Fisher\040Vector}{chapter.6}% 26
-\BOOKMARK [2][]{subsection.6.3.1}{6.3.1 Fisher核}{section.6.3}% 27
-\BOOKMARK [2][]{subsection.6.3.2}{6.3.2 图像的Fisher向量}{section.6.3}% 28
-\BOOKMARK [2][]{subsection.6.3.3}{6.3.3 Fisher Vector实验}{section.6.3}% 29
-\BOOKMARK [0][]{chapter.7}{7 ANN搜索}{}% 30
-\BOOKMARK [1][]{section.7.1}{7.1 矩阵相乘}{chapter.7}% 31
-\BOOKMARK [1][]{section.7.2}{7.2 基于树的方法}{chapter.7}% 32
-\BOOKMARK [1][]{section.7.3}{7.3 哈希方法}{chapter.7}% 33
-\BOOKMARK [1][]{section.7.4}{7.4 矢量量化方法}{chapter.7}% 34
-\BOOKMARK [2][]{subsection.7.4.1}{7.4.1 PQ乘积量化}{section.7.4}% 35
-\BOOKMARK [2][]{subsection.7.4.2}{7.4.2 倒排乘积量化}{section.7.4}% 36
-\BOOKMARK [1][]{section.7.5}{7.5 拓展查询}{chapter.7}% 37
-\BOOKMARK [0][]{chapter*.9}{参考文献}{}% 38
+\BOOKMARK [1][]{section.1.2}{1.2 计算机视觉通用工具包}{chapter.1}% 6
+\BOOKMARK [2][]{subsection.1.2.1}{1.2.1\040OpenCV}{section.1.2}% 7
+\BOOKMARK [1][]{section.1.3}{1.3 图像特征表达工具包}{chapter.1}% 8
+\BOOKMARK [2][]{subsection.1.3.1}{1.3.1\040VLFeat}{section.1.3}% 9
+\BOOKMARK [2][]{subsection.1.3.2}{1.3.2\040Yael}{section.1.3}% 10
+\BOOKMARK [2][]{subsection.1.3.3}{1.3.3\040Caffe}{section.1.3}% 11
+\BOOKMARK [1][]{section.1.4}{1.4 索引构建工具包}{chapter.1}% 12
+\BOOKMARK [2][]{subsection.1.4.1}{1.4.1\040Falconn}{section.1.4}% 13
+\BOOKMARK [2][]{subsection.1.4.2}{1.4.2\040Nmslib}{section.1.4}% 14
+\BOOKMARK [2][]{subsection.1.4.3}{1.4.3\040Faiss}{section.1.4}% 15
+\BOOKMARK [0][]{chapter.2}{2 工业常用算法}{}% 16
+\BOOKMARK [1][]{section.2.1}{2.1\040PCA}{chapter.2}% 17
+\BOOKMARK [1][]{section.2.2}{2.2\040KMeans}{chapter.2}% 18
+\BOOKMARK [0][]{chapter.3}{3 图像特征表达}{}% 19
+\BOOKMARK [1][]{section.3.1}{3.1 局部特征}{chapter.3}% 20
+\BOOKMARK [2][]{subsection.3.1.1}{3.1.1 SIFT特征}{section.3.1}% 21
+\BOOKMARK [2][]{subsection.3.1.2}{3.1.2 HOG特征}{section.3.1}% 22
+\BOOKMARK [1][]{section.3.2}{3.2 全局特征}{chapter.3}% 23
+\BOOKMARK [2][]{subsection.3.2.1}{3.2.1 CNN特征}{section.3.2}% 24
+\BOOKMARK [0][]{chapter.4}{4 载入、显示及保存}{}% 25
+\BOOKMARK [0][]{chapter.5}{5 图像基础}{}% 26
+\BOOKMARK [0][]{chapter.6}{6 特征编码}{}% 27
+\BOOKMARK [1][]{section.6.1}{6.1 BoF词袋模型}{chapter.6}% 28
+\BOOKMARK [1][]{section.6.2}{6.2 VLAD局部聚合向量}{chapter.6}% 29
+\BOOKMARK [2][]{subsection.6.2.1}{6.2.1 VLAD归一化}{section.6.2}% 30
+\BOOKMARK [1][]{section.6.3}{6.3\040Fisher\040Vector}{chapter.6}% 31
+\BOOKMARK [2][]{subsection.6.3.1}{6.3.1 Fisher核}{section.6.3}% 32
+\BOOKMARK [2][]{subsection.6.3.2}{6.3.2 图像的Fisher向量}{section.6.3}% 33
+\BOOKMARK [2][]{subsection.6.3.3}{6.3.3 Fisher Vector实验}{section.6.3}% 34
+\BOOKMARK [0][]{chapter.7}{7 ANN搜索}{}% 35
+\BOOKMARK [1][]{section.7.1}{7.1 矩阵相乘}{chapter.7}% 36
+\BOOKMARK [1][]{section.7.2}{7.2 基于树的方法}{chapter.7}% 37
+\BOOKMARK [1][]{section.7.3}{7.3 哈希方法}{chapter.7}% 38
+\BOOKMARK [1][]{section.7.4}{7.4 矢量量化方法}{chapter.7}% 39
+\BOOKMARK [2][]{subsection.7.4.1}{7.4.1 PQ乘积量化}{section.7.4}% 40
+\BOOKMARK [2][]{subsection.7.4.2}{7.4.2 倒排乘积量化}{section.7.4}% 41
+\BOOKMARK [1][]{section.7.5}{7.5 拓展查询}{chapter.7}% 42
+\BOOKMARK [0][]{chapter*.9}{参考文献}{}% 43

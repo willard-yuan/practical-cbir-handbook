@@ -124,7 +124,44 @@
 
 随着视觉数据的快速增长，面向大规模视觉数据的基于内容的图像检索技术不论是在商业应用还是计算机视觉社区都受到了极大的关注。传统的暴力(brute-force) 搜索方法(又称线性扫描)通过逐个与数据库中的每个点进行相似性计算然后进行排序，这种简单粗暴的方式虽然很容易实现，但是会随着数据库的大小以及特征维度的增加其搜索代价也会逐步的增加，从而使得暴力搜索仅适用于数据量小的小规模图像数据库，在大规模图像库上这种暴力搜索的方式不仅消耗巨大的计算资源，而且单次查询的响应时间会随着数据样本的增加以及特征维度的增加而增加，为了降低搜索的空间的空间复杂度与时间复杂度，在过去的十几年里研究者们找到了一种可供替代的方案— 近似最近邻(ANN, Approximate Nearest Neighbor)搜索方法，并提出了很多高效的检索技术，其中最成功的方法包括基于树结构的图像检索方法、基于哈希的图像检索方法和基于向量量化的图像检索方法。
 
-\chapter{工业常用工具}
+\section{计算机视觉通用工具包}
+
+\subsection{OpenCV}
+
+如果说NumPy的主要目标是用于有效地表示大型多维数组，那么，OpenCV的主要目标便是实时处理图像。该库从1999年发布以来，已随处可见，直到在2009年发布的第2版中我们才看到了它对NumPy的支持。OpenCV这个库本身是用C/C++写的，但在运行该安装包时它提供了Python的绑定。OpenCV是我手下最喜欢的计算机视觉库，在本书中，我们会经常使用它。
+
+OpenCV的安装是常常会变化的。由于这个库是用C/C++写的，所以在编译的时候需要特别的注意，并要确保预先要安装的东西都已安装。由于OpenCV的最新安装说明是经常会改变的，所以在安装OpenCV时要确保自己去查看OpenCV的网站\url{http://opencv.org/}。
+
+\section{图像特征表达工具包}
+
+\subsection{VLFeat}
+
+\subsection{Yael}
+
+\href{http://yael.gforge.inria.fr/}{Yael}是一个用C写的针对大规模图像检索而开发的工具包，它实现了图像检索中常用的诸如BoVW、VLAD、Fisher向量、聚类、倒排等算法，此外它还提供了某些函数对应的Python接口，使得研究人员和开发者能够很方便快捷地实现一些相应的对比算法。本书在相关的实现上会比较多的借助该库中的一些函数。总之，该库不论是从实用性来看，还是纯碎从学习的角度来看，都是非常值得推荐的一个工具包。
+
+这里对Yael的安装过程做一个简单的介绍。首先下载\href{https://gforge.inria.fr/frs/?group_id=2151}{Yael v438}，解压后执行下面命令即可完成Yael的安装：
+
+\begin{lstlisting}[language=bash]
+./configure.sh --msse4 --enable-numpy
+make
+python setup.py install
+\end{lstlisting}
+
+
+\subsection{Caffe}
+
+\section{索引构建工具包}
+
+\subsection{Falconn}
+
+\subsection{Nmslib}
+
+\subsection{Faiss}
+
+你可以在这里找到他的说明：\href{http://www.guidefreitas.com/installing-opencv-2-4-2-on-mac-osx-mountain-lionwith-python-support}{http://www.guidefreitas.com/installing-opencv-2-4-2-on-mac-osx-mountain-lionwith-python-support}。
+
+\chapter{工业常用算法}
 
 \section{PCA}
 
@@ -165,6 +202,88 @@ cv::PCA loadPCA(std::string &filename){
 
 \section{KMeans}
 
+\begin{lstlisting}[language=python]
+
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import os
+import numpy as np
+from yael import ynumpy
+import time
+
+
+txt_path = '/home/yuanyong/py/fv_retrieval/oxford.txt'
+sift_dir = '/home/yuanyong/py/fv_retrieval/oxford_hesaff_sift'
+
+with open(txt_path, 'r') as f:
+    content = f.readlines()
+    content = [x.strip() for x in content]
+
+
+all_desc = []
+for i, line in enumerate(content):
+    print "%d(%d): %s" %(i+1, len(content), line)
+    hesaff_path = os.path.join(sift_dir, os.path.splitext(os.path.basename(line))[0] + '.hesaff.sift')
+    hesaff_info = np.loadtxt(hesaff_path)
+    if hesaff_info.shape[0] == 0:
+       continue
+    elif hesaff_info.shape[0] > 0 and len(hesaff_info.shape) == 1:
+        desc = hesaff_info[5:]
+        all_desc.append(desc)
+    elif hesaff_info.shape[0] > 0 and len(hesaff_info.shape) > 1:
+        desc = hesaff_info[:, 5:]
+        all_desc.append(desc)
+
+# make a big matrix with all image descriptors, rootsift
+all_desc = np.sqrt(np.vstack(all_desc))
+
+n_sample = 256 * 1000
+
+# choose n_sample descriptors at random
+np.random.seed(1024)
+sample_indices = np.random.choice(all_desc.shape[0], n_sample)
+sample = all_desc[sample_indices]
+
+# until now sample was in uint8. Convert to float32
+sample = sample.astype('float32') # yael likes floats better than doubles
+
+# compute mean and covariance matrix for the PCA
+mean = sample.mean(axis = 0)
+sample = sample - mean
+cov = np.dot(sample.T, sample)
+
+# compute PCA matrix and keep only 64 dimensions
+eigvals, eigvecs = np.linalg.eig(cov)
+perm = eigvals.argsort()                   # sort by increasing eigenvalue
+pca_transform = eigvecs[:, perm[64:128]]   # eigenvectors for the 64 last eigenvalues
+
+# transform sample with PCA (note that numpy imposes line-vectors,
+# so we right-multiply the vectors)
+sample = np.dot(sample, pca_transform)
+
+# train Kmeans
+print "start train kmeans ......."
+
+print sample.shape[0]
+
+k = 128                 # number of cluster to create
+d = sample.shape[1]     # dimensionality of the vectors
+n = sample.shape[0]     # number of vectors
+nt = 20             # number of threads to use
+niter = 0           # number of iterations (0 for convergence)
+redo = 1            # number of redo
+
+t0 = time.time()
+(centroids, qerr, dis, assign, nassign) = ynumpy.kmeans(sample, k, nt = nt, niter = niter, redo = redo, output = 'full')
+t1 = time.time()
+print "kmeans performed in %.3f s" % (t1 - t0)
+
+np.save("./models/centroids_128_data", centroids)
+np.save("./models/pca_data", pca_transform)
+np.save("./models/mean_data", mean)
+\end{lstlisting}
+
 \chapter{图像特征表达}
 
 要探索计算机视觉世界，首先我们需要安装一些安装包。作为探索计算机视觉之旅的起始，要安装这些安装包特别是OpenCV是非常冗余乏味的，它依赖于你所使用的操作系统。我已经试着将这些安装说明简化成了一份简短的使用指南，不过，正如你所了解的，锁着项目、网站的改变，这些安装说明是会变化的！如果你在安装中遇到了问题，确保查看安装包的网站以获得最新安装说明。
@@ -202,40 +321,6 @@ NumPy是一个用于Python编程语言的库，它对大型多维数组提供支
 Matplotlib可以在\url{http://matplotlib.org/}上下载。如果你已经安装了ScipySuperpack，那么Matplotlib就已经在你的计算机上安装了。你也可以通过easy\_install或pip来安装它。
 
 此外，在matplotlib官网上还提供了Windows的二进制安装文件。
-
-\section{OpenCV}
-
-如果说NumPy的主要目标是用于有效地表示大型多维数组，那么，OpenCV的主要目标便是实时处理图像。该库从1999年发布以来，已随处可见，直到在2009年发布的第2版中我们才看到了它对NumPy的支持。OpenCV这个库本身是用C/C++写的，但在运行该安装包时它提供了Python的绑定。OpenCV是我手下最喜欢的计算机视觉库，在本书中，我们会经常使用它。
-
-OpenCV的安装是常常会变化的。由于这个库是用C/C++写的，所以在编译的时候需要特别的注意，并要确保预先要安装的东西都已安装。由于OpenCV的最新安装说明是经常会改变的，所以在安装OpenCV时要确保自己去查看OpenCV的网站\url{http://opencv.org/}。
-
-\subsection{Windows和linux}
-
-OpenCV文档提供了在Windows和Linux用二进制版本安装OpenCV非常棒的教程，你可以在这里看到它的安装说明\url{http://docs.opencv.org/doc/tutorials/introduction/table_of_content_introduction/table_of_content_introduction.html#table-of-content-introduction}。
-
-\subsection{OSX}
-
-过去数年，在OSX上安装OpenCV是一件很痛苦的事，幸运的是现在它的安装已变得越来越简单。你需要安装cmake来构建并编译该OpenCV库，你可以从这里下载cmake\href{http://www.cmake.org/cmake/help/install.html}{http://www.cmake.org/cmake/help/install.html}。
-
-安装cmake后，你就可以从SourceForge资源库检查源代码并进行编译。一般情况下，我发觉Guilherme Defreitas关于怎样在OSX上安装OpenCV的说明是非常棒的，并且为OpenCV的学习给出了一个很好的开始。
-
-你可以在这里找到他的说明：\href{http://www.guidefreitas.com/installing-opencv-2-4-2-on-mac-osx-mountain-lionwith-python-support}{http://www.guidefreitas.com/installing-opencv-2-4-2-on-mac-osx-mountain-lionwith-python-support}。
-
-\section{Mahotas}
-
-如OpenCV一样，Mahotas也依赖于NumPy数组。很多在Mahotas中实现的函数都可以在OpenCV中找到，不过在某些情况下，Mahotas接口比OpenCV接口更容易使用，我们将用Mahotas作为OpenCV的补充。
-
-\subsection{全平台}
-
-在不同的平台上安装Mahotas是极其容易的。假设你已经安装了MumPy和SciPy，那么你所有需要做的只是运行pip install mahotas或easy install mahotas。
-
-既然我们已经安装了所有我们需要的安装包，现在就让我们开始探索计算机视觉世界之旅吧！
-
-\subsection{跳过安装}
-
-正如我在前面提到过，安装这些安装包是费时且繁琐的。如果你想跳过上面那些安装过程而直接进入图像处理和计算机视觉世界，我已经打包好了一个预先配置好了的Ubuntu虚拟机，该虚拟机安装好了上面提到的所有安装包。
-
-如果你对该虚拟机感兴趣并且想要下载它的话（它能够节省你很多时间并避免很多麻烦），你可以到这里下载\href{http://www.pyimagesearch.com/practicalpython-opencv/}{http://www.pyimagesearch.com/practicalpython-opencv/}。
 
 \chapter{载入、显示及保存}
 
@@ -355,7 +440,78 @@ void vlad_compute(int k, int d, const float *centroids,
 
 上面清楚的显示了得到的desc(即VLAD特征表示)为距离类中心最近的局部特征的累积和，其中方法nn是做最近邻查找。有了这个接口后，我们要做的就是提取局部特征，比如SIFT，然后使用Yael里提供的KMeans接口做聚类，得到聚类中心，然后调用该函数，即可得到VLAD特征表示。
 
+\begin{lstlisting}[language=python]
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Anthor: yongyuan.name
+
+import os,h5py
+import numpy as np
+from yael import ynumpy
+
+# save feature to h5py
+h5f = h5py.File('./models/vlad_128_8192.h5', 'w')
+# load PCA and KMeans model
+centroids = np.load('./models/centroids_data.npy')
+pca_transform = np.load('./models/pca_data.npy')
+mean = np.load('./models/mean_data.npy')
+
+#
+txt_path = '/home/yuanyong/py/fv_retrieval/oxford.txt'
+with open(txt_path, 'r') as f:
+    content = f.readlines()
+    content = [x.strip() for x in content]
+
+# compute VLAD feature
+features = []
+image_names = []
+for i, line in enumerate(content):
+    img_name = os.path.basename(line)
+    print "%d(%d): %s" %(i+1, len(content), img_name)
+    hesaff_path = os.path.join('/home/yuanyong/py/fv_retrieval/oxford_hesaff_sift', os.path.splitext(os.path.basename(line))[0] + '.hesaff.sift')
+    hesaff_info = np.loadtxt(hesaff_path)
+    if hesaff_info.shape[0] == 0:
+        hesaff_info = np.zeros((1, 133), dtype = 'float32')
+    elif hesaff_info.shape[0] > 0 and len(hesaff_info.shape) == 1:
+        hesaff_info = hesaff_info.reshape([1, 133])
+
+    image_desc = np.sqrt(hesaff_info[:, 5:])
+
+    # apply the PCA to the image descriptor
+    image_desc = np.dot(image_desc - mean, pca_transform)
+    image_desc = image_desc.astype(np.float32)
+
+    # compute VLAD
+    vlad = ynumpy.vlad(centroids, image_desc)  # num_centroids * d
+    # L2 normalization
+    norms_vlad = np.sqrt(np.sum(vlad ** 2, 1))
+    norms_vlad[norms_vlad < 1e-12] = 1e-12
+    vlad /= norms_vlad.reshape(-1, 1)
+    vlad = vlad.flatten()
+    features.append(vlad)
+    image_names.append(img_name)
+
+# make one matrix with all FVs
+features = np.vstack(features)
+
+# power-normalization, square-rooting normalization
+features = np.sign(features) * np.abs(features) ** 0.5
+
+# L2 normalize
+norms = np.sqrt(np.sum(features ** 2, 1))
+norms[norms < 1e-12] = 1e-12
+features /= norms.reshape(-1, 1)
+
+# save feats
+print "number samples: %d, dimension: %d, number names: %d" %(features.shape[0], features.shape[1], len(image_names))
+h5f['feats'] = features
+h5f['names'] = image_names
+h5f.close()
+\end{lstlisting}
+
 经过上面三个步骤后，一幅图像可以用一个1(K128)维的向量表示。为了初步验证上面的过程是否正确，来看看上面那篇论文中VLAD的维数是否如这里所理解的是一个1(K128)维的向量，直接看实验表：
+
+\subsection{VLAD归一化}
 
 \section{Fisher Vector}
 
