@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2015.6.22)  9 OCT 2017 23:14
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2015.6.22)  16 OCT 2017 23:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -2151,11 +2151,11 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 41562 strings out of 493706
- 830350 string characters out of 6145769
- 1114368 words of memory out of 5000000
- 44220 multiletter control sequences out of 15000+600000
- 20252 words of font info for 118 fonts, out of 8000000 for 9000
+ 41566 strings out of 493706
+ 830576 string characters out of 6145769
+ 1121368 words of memory out of 5000000
+ 44222 multiletter control sequences out of 15000+600000
+ 20268 words of font info for 120 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
  62i,15n,84p,10399b,1924s stack positions out of 5000i,500n,10000p,200000b,80000s
 

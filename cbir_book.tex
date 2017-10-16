@@ -420,7 +420,7 @@ $ python load_display_save.py --image ../images/trex.png
 
 BOW做的是描述子的0阶统计分布，而FV则是扩展了的BOW的高阶统计。这里引出来的FV是什么呢？VLAD是FV的特例，这里我们先不关注FV，我们只要借此推得VLAD是BOW的高阶统计就行。
 
-这里我们可以直接调用INRIA开发的Yael工具包，该工具包提供了BoW、VALD以及FV的接口。为了更好的理解VALD编码的过程，可以打开Yael的vlad.c文件，其中有$vlad_compute$方法：
+这里我们直接调用INRIA开发的Yael工具包，该工具包提供了BoW、VALD以及FV特征编码的接口。在使用VLAD接口之前，为了更好的理解VALD编码的过程，打开Yael的\href{https://github.com/jackculpepper/yael/blob/master/yael/vlad.c#L48}{vlad.c}文件，可以看到vlad\_compute()方法：
 
 \begin{lstlisting}[language=c++]
 void vlad_compute(int k, int d, const float *centroids, 
@@ -438,7 +438,7 @@ void vlad_compute(int k, int d, const float *centroids,
 }
 \end{lstlisting}
 
-上面清楚的显示了得到的desc(即VLAD特征表示)为距离类中心最近的局部特征的累积和，其中方法nn是做最近邻查找。有了这个接口后，我们要做的就是提取局部特征，比如SIFT，然后使用Yael里提供的KMeans接口做聚类，得到聚类中心，然后调用该函数，即可得到VLAD特征表示。
+上面$vlad\_compute()$中，传入的参数k为类中心数目，d为局部描述子的维度，centroids为由类中心串接起来的长度为$kd$的一维数组指针，n为局部描述子数目，v为局部描述子串接起来的长度为$nd$的一维数组指针，desc即为得到的VLAD全局特征。在$vlad\_compute()$中，还用到了一个nn()的函数，该函数用于计算最近邻。从for循环中，清楚地显示了得到的desc(即VLAD全局特征表示)为距离类中心最近的局部特征的累积残差。有了这个接口后，我们要做的就是提取局部特征，比如SIFT，然后使用Yael提供的KMeans接口做聚类，得到聚类中心，然后调用该函数，即可得到VLAD特征表示。
 
 \begin{lstlisting}[language=python]
 #!/usr/bin/env python
